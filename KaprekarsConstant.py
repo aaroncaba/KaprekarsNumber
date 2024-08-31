@@ -5,11 +5,12 @@ import numpy.typing as npt
 import cProfile
 
 
-def digits_of(k: int, num_of_digits: int) -> npt.NDArray:
+def digits_of(k: int, num_of_digits: int):
+    s = str(k)
     ret = np.zeros(num_of_digits, dtype=np.int32)
-    for i in range(num_of_digits):
-        place = num_of_digits-i-1
-        ret[i] = np.int32(k // 10**place % 10)
+    for i in range(len(s)):
+        ret[i] = int(s[i])
+        # print(ret)
 
     return ret
 
@@ -55,9 +56,10 @@ def iter_count(k: int, num_of_digits: int):
 
 def calc_it(n: int, max_n=None) -> None:
     if max_n is None:
-        max_n = 10**n
-    count = np.zeros(10**n+1, dtype=np.int32)
-    final = np.zeros(10**n+1, dtype=np.int32)
+        max_n = 10**n-1
+    max_n = min(max_n, (10**n)-1)
+    count = np.zeros(max_n+1, dtype=np.int32)
+    final = np.zeros(max_n+1, dtype=np.int32)
     for i in range(1, max_n+1):
         cc, ff = iter_count(i, n)
         count[i] = cc
@@ -73,9 +75,9 @@ if __name__ == "__main__":
 
     profile = True
     if profile:
-        cProfile.run('calc_it(n,10000)',sort='tottime')
+        cProfile.run('calc_it(n,10000)', sort='tottime')
     else:
-        count, final = calc_it(n)
+        count, final = calc_it(n, 10**5)
         plt.figure(0)
         plt.plot(final)
         plt.figure(1)
