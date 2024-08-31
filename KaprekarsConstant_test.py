@@ -31,3 +31,7 @@ class TestTheThing(unittest.TestCase):
     def test_iter_count_is_1_for_6174(self):
         count, final = iter_count(6174, 4)
         self.assertEqual(0, count)
+
+    def test_iter_count_is_1_for_11111(self):
+        count, final = iter_count(11111, 5)
+        self.assertEqual(1, count)

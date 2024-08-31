@@ -36,6 +36,7 @@ def iter_count(k: int, num_of_digits: int):
     knew = k
     kold = 0
     count = 0
+    klist = [k]
 
     while kold != knew or count == 0:
         kold = knew
@@ -43,39 +44,45 @@ def iter_count(k: int, num_of_digits: int):
         nbig = digits_to_num(digits_bigf(knew, num_of_digits))
         knew = nbig - nsmall
         count += 1
-        if count > 1000:
+        # print(count, kold)
+
+        if knew in klist:
             break
+        klist.append(knew)
 
     return count-1, knew
 
 
-def calc_it(n: int) -> None:
-    cc = 10**n
-    count = np.zeros(10**n, dtype=np.int32)
-    final = np.zeros(10**n, dtype=np.int32)
-    for i in range(1, cc):
+def calc_it(n: int, max_n=None) -> None:
+    if max_n is None:
+        max_n = 10**n
+    count = np.zeros(10**n+1, dtype=np.int32)
+    final = np.zeros(10**n+1, dtype=np.int32)
+    for i in range(1, max_n+1):
         cc, ff = iter_count(i, n)
         count[i] = cc
         final[i] = ff
-        if i / 100 == math.floor(i/100):
+        if i / 1000 == math.floor(i/1000):
             print(i)
     return count, final
 
 
 if __name__ == "__main__":
-    n = 5
 
-    # cProfile.run('calc_it(n)')
+    n = 6
 
-    count,final = calc_it(n)
+    profile = True
+    if profile:
+        cProfile.run('calc_it(n,10000)',sort='tottime')
+    else:
+        count, final = calc_it(n)
+        plt.figure(0)
+        plt.plot(final)
+        plt.figure(1)
+        plt.plot(count)
 
-    plt.figure(0)
-    plt.plot(final)
-    plt.figure(1)
-    plt.plot(count)
+        finalnum = np.unique(final)
+        print(f'Last numbers: {finalnum}')
 
-    finalnum = list(set(final))
-    print(finalnum)
-
-    counts = set(count)
-    print(count)
+        counts = np.unique(count)
+        print(f'Cycle counts: {counts}')
