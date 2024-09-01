@@ -17,8 +17,8 @@ def digits_of(k: int, num_of_digits: int):
 
 def digits_bigf(k: int, num_of_digits: int):
     dd = digits_of(k, num_of_digits)
-    tmp = -np.sort(-dd)
-    return tmp
+    dd[::-1].sort()
+    return dd
 
 
 def digits_smallf(k: int, num_of_digits):
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     profile = True
     if profile:
-        cProfile.run('calc_it(n,10000)', sort='tottime')
+        cProfile.run('calc_it(n,100000)', sort='cumtime')
     else:
         count, final = calc_it(n, 10**5)
         plt.figure(0)
