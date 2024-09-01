@@ -22,7 +22,7 @@ class KaprekaersConstant():
         elif type == 'small':
             digits.sort()
         else:
-            raise Exception(f'Badd Argument:  {type}')
+            raise Exception(f'Bad Argument:  {type}')
 
         return digits
 
@@ -34,7 +34,7 @@ class KaprekaersConstant():
             m = m*10
         return ret
 
-    def iter_count(self, k: int ):
+    def iter_count(self, k: int):
         knew = k
         kold = 0
         count = 0
@@ -81,11 +81,11 @@ if __name__ == "__main__":
     if profile:
         cProfile.run('kc.calc_it(100000)', sort='tottime')
     else:
-        count, final = kc.calc_it(10**5)
+        count, final = kc.calc_it(10**6)
         plt.figure(0)
-        plt.plot(final)
+        plt.plot(final, '.', markersize=1)
         plt.figure(1)
-        plt.plot(count)
+        plt.plot(count, '.', markersize=1)
 
         finalnum = np.unique(final)
         print(f'Last numbers: {finalnum}')
