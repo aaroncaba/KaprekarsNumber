@@ -8,14 +8,13 @@ import cProfile
 class KaprekaersConstant():
     def __init__(self, n):
         self.n = n
-        self.zeros = np.zeros(n, dtype=np.int32)
 
-    def calc_it(self,  max_n=None) -> None:
+    def calc_it(self,  max_n=None) -> tuple[npt.NDArray, npt.NDArray]:
         if max_n is None:
             max_n = 10**self.n-1
         max_n = min(max_n, (10**self.n)-1)
-        count = np.zeros(max_n+1, dtype=np.int32)
-        final = np.zeros(max_n+1, dtype=np.int32)
+        count = np.zeros(max_n+1, dtype=int)
+        final = np.zeros(max_n+1, dtype=int)
         for i in range(1, max_n+1):
             cc, ff = self.iter_count(i)
             count[i] = cc
@@ -24,11 +23,11 @@ class KaprekaersConstant():
                 print(i)
         return count, final
 
-    def iter_count(self, k: int):
+    def iter_count(self, k: int) -> tuple[int, int]:
         knew = k
-        kold = 0
-        count = 0
-        klist = [k]
+        kold: int = 0
+        count: int = 0
+        klist: list[int] = [k]
 
         while kold != knew or count == 0:
             kold = knew
@@ -46,7 +45,7 @@ class KaprekaersConstant():
 
         return count-1, knew
 
-    def digits_to_num(self, digits: npt.NDArray):
+    def digits_to_num(self, digits: npt.NDArray) -> int:
         m = 1
         ret = 0
         for dd in digits[::-1]:
@@ -54,9 +53,9 @@ class KaprekaersConstant():
             m = m*10
         return ret
 
-    def digits_of(self, k: int,  type: str):
+    def digits_of(self, k: int,  type: str) -> npt.NDArray:
         # get individual digits
-        digits = self.zeros.copy()
+        digits = np.zeros(self.n, dtype=int)
         s = str(k)
         for i in range(len(s)):
             digits[i] = int(s[i])
