@@ -10,29 +10,19 @@ class KaprekaersConstant():
         self.n = n
         self.zeros = np.zeros(n, dtype=np.int32)
 
-    def digits_of(self, k: int,  type: str):
-        # get individual digits
-        digits = self.zeros.copy()
-        s = str(k)
-        for i in range(len(s)):
-            digits[i] = int(s[i])
-
-        if type == 'big':
-            digits[::-1].sort()
-        elif type == 'small':
-            digits.sort()
-        else:
-            raise Exception(f'Bad Argument:  {type}')
-
-        return digits
-
-    def digits_to_num(self, digits: npt.NDArray):
-        m = 1
-        ret = 0
-        for dd in digits[::-1]:
-            ret = ret + m*dd
-            m = m*10
-        return ret
+    def calc_it(self,  max_n=None) -> None:
+        if max_n is None:
+            max_n = 10**self.n-1
+        max_n = min(max_n, (10**self.n)-1)
+        count = np.zeros(max_n+1, dtype=np.int32)
+        final = np.zeros(max_n+1, dtype=np.int32)
+        for i in range(1, max_n+1):
+            cc, ff = self.iter_count(i)
+            count[i] = cc
+            final[i] = ff
+            if i / 1000 == math.floor(i/1000):
+                print(i)
+        return count, final
 
     def iter_count(self, k: int):
         knew = k
@@ -56,19 +46,29 @@ class KaprekaersConstant():
 
         return count-1, knew
 
-    def calc_it(self,  max_n=None) -> None:
-        if max_n is None:
-            max_n = 10**self.n-1
-        max_n = min(max_n, (10**self.n)-1)
-        count = np.zeros(max_n+1, dtype=np.int32)
-        final = np.zeros(max_n+1, dtype=np.int32)
-        for i in range(1, max_n+1):
-            cc, ff = self.iter_count(i)
-            count[i] = cc
-            final[i] = ff
-            if i / 1000 == math.floor(i/1000):
-                print(i)
-        return count, final
+    def digits_to_num(self, digits: npt.NDArray):
+        m = 1
+        ret = 0
+        for dd in digits[::-1]:
+            ret = ret + m*dd
+            m = m*10
+        return ret
+
+    def digits_of(self, k: int,  type: str):
+        # get individual digits
+        digits = self.zeros.copy()
+        s = str(k)
+        for i in range(len(s)):
+            digits[i] = int(s[i])
+
+        if type == 'big':
+            digits[::-1].sort()
+        elif type == 'small':
+            digits.sort()
+        else:
+            raise Exception(f'Bad Argument:  {type}')
+
+        return digits
 
 
 if __name__ == "__main__":
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     if profile:
         cProfile.run('kc.calc_it(100000)', sort='tottime')
     else:
-        count, final = kc.calc_it(10**6)
+        count, final = kc.calc_it()
         plt.figure(0)
         plt.plot(final, '.', markersize=1)
         plt.figure(1)
