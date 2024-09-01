@@ -10,7 +10,6 @@ def digits_of(k: int, num_of_digits: int):
     s = str(k)
     for i in range(len(s)):
         ret[i] = int(s[i])
-        # print(ret)
 
     return ret
 
@@ -23,7 +22,8 @@ def digits_bigf(k: int, num_of_digits: int):
 
 def digits_smallf(k: int, num_of_digits):
     dd = digits_of(k, num_of_digits)
-    return np.sort(dd)
+    dd.sort()
+    return dd
 
 
 def digits_to_num(digits: npt.NDArray):
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     profile = True
     if profile:
-        cProfile.run('calc_it(n,100000)', sort='cumtime')
+        cProfile.run('calc_it(n,100000)', sort='tottime')
     else:
         count, final = calc_it(n, 10**5)
         plt.figure(0)
