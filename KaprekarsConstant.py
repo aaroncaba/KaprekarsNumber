@@ -6,8 +6,8 @@ import cProfile
 
 
 def digits_of(k: int, num_of_digits: int):
-    s = str(k)
     ret = np.zeros(num_of_digits, dtype=np.int32)
+    s = str(k)
     for i in range(len(s)):
         ret[i] = int(s[i])
         # print(ret)
@@ -27,10 +27,12 @@ def digits_smallf(k: int, num_of_digits):
 
 
 def digits_to_num(digits: npt.NDArray):
-    nsmall = ''
-    for dd in digits:
-        nsmall += str(dd)
-    return int(nsmall)
+    m = 1
+    ret = 0
+    for dd in digits[::-1]:
+        ret = ret + m*dd
+        m = m*10
+    return ret
 
 
 def iter_count(k: int, num_of_digits: int):
